@@ -10,7 +10,7 @@ witze = [
     "Chuck Norris kann Zwiebeln zum weinen bringen"
 ]
 
-@app.route("https://witz-app.onrender.com/witz", methods=["GET"])
+@app.route("/witz", methods=["GET"])
 def witz():
     return jsonify({"witz": random.choice(witze)})
 
