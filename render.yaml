@@ -1,0 +1,6 @@
+services:
+- type: web
+  name: chuck-witz.api
+  rnv: python
+  buildCommand: "pip install -r requirements.txt"
+  startCommand: "python app.py"
