@@ -1,7 +1,7 @@
 from flask import Flask, jsonify
 import random
 
-app = Flask(__name__)
+app = Flask(name)
 
 witze = [
     "Chuck Norris kann Drehtüren zuschlagen",
