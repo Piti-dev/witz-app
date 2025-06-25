@@ -2,6 +2,7 @@ import os
 from flask import Flask, jsonify
 import random
 import sqlite3
+from flask import request
 
 app = Flask(__name__)
 
@@ -23,6 +24,17 @@ def zufallswitz():
     conn.close()
     return jsonify({"witz": witz["inhalt"]})
 
+@app.route("/hinzufuegen", methods=["POST"])
+def witz_hinzufuegen():
+    daten = request.get_json()
+    witz_text = daten.get("witz", "").strip()
+    if witz_text:
+        conn = get_db_connection()
+        conn.execute("INSERT INTO witze (inhalt) VALUES (?)", (witz_text,))
+        conn.commit()
+        conn.close()
+        return jsonify({"erfolg": True})
+    return jsonify({"erfolg": False, "fehler": "Kein Text eingegeben"}), 400
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))  
