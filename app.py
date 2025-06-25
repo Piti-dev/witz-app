@@ -10,9 +10,18 @@ witze = [
     "Chuck Norris kann Zwiebeln zum weinen bringen"
 ]
 
-@app.route("/witz", methods=["GET"])
-def witz():
-    return jsonify({"witz": random.choice(witze)})
+def get_db_connection():
+    conn = sqlite3.connect("witze.db")
+    conn.row_factory = sqlite3.Row
+    return conn
+
+@app.route("/witz")
+def zufallswitz():
+    conn = get_db_connection()
+    witz = conn.execute("SELECT inhalt FROM witze ORDER BY RANDOM() LIMIT 1").fetchone()
+    conn.close()
+    return jsonify({"witz": witz["inhalt"]})
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))  
