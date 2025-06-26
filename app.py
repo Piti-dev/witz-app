@@ -17,6 +17,14 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
+@app.route("/alle")
+def alle_witze():
+    conn = get_db_connection()
+    witze = conn.execute("SELECT * FROM witze").fetchall()
+    conn.close()
+    return jsonify([{"id": w["id"], "inhalt": w["inhalt"]} for w in witze])
+
+
 @app.route("/bearbeiten/<int:id>", methods=["PUT"])
 def witz_bearbeiten(id):
     daten = request.get_json()
