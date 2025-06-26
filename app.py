@@ -17,6 +17,19 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
+@app.route("/bearbeiten/<int:id>", methods=["PUT"])
+def witz_bearbeiten(id):
+    daten = request.get_json()
+    neuer_text = daten.get("witz", "").strip()
+    if not neuer_text:
+        return jsonify({"erfolg": False, "fehler": "Leerer Text"}), 400
+
+    conn = get_db_connection()
+    conn.execute("UPDATE witze SET inhalt = ? WHERE id = ?", (neuer_text, id))
+    conn.commit()
+    conn.close()
+    return jsonify({"erfolg": True})
+
 @app.route("/witz")
 def zufallswitz():
     conn = get_db_connection()
